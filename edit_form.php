@@ -10,15 +10,17 @@ class block_showgrade_edit_form extends block_edit_form {
 
         // Section header title according to language file.
         $mform->addElement('header', 'configheader', get_string('blocksettings', 'block'));
-
         $mform->addElement('text', 'config_title', get_string('blocktitle', 'block_showgrade'));
-        $mform->setDefault('config_title', get_string('defaulttext', 'block_showgrade'));
         $mform->setType('config_title', PARAM_TEXT);
 
         $categoriesRS = grade_category::fetch_all(array('courseid'=>$COURSE->id));
 
         foreach($categoriesRS as $record) {
-            $categories[$record->id] = $record->fullname;
+            if ($record->fullname == "?") {
+                $categories[$record->id] = get_string('coursetotal', 'block_showgrade');
+            } else {
+                $categories[$record->id] = $record->fullname;
+            }
         }
 
         $mform->addElement('select', 'config_category', get_string('category', 'block_showgrade'), $categories);

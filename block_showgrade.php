@@ -70,7 +70,20 @@ class block_showgrade extends block_base {
                           'userid'=> $USER->id));
         }
 
-        return $this->grade->finalgrade;
+        return $this->grade;
+    }
+
+    function get_formatted_grade() {
+        if ($this->get_grade() == null) {
+            return "-";
+        }
+        if (is_numeric($this->get_grade())) {
+            return number_format($this->get_grade(), 0) . ' points';
+        }
+        else {
+            // This should never happen!
+            return "*";
+        }
     }
 
     function get_content() {
@@ -86,21 +99,9 @@ class block_showgrade extends block_base {
         }
 
         $this->content = new stdClass();
-        $this->content->items = array();
-        $this->content->icons = array();
         $this->content->footer = '';
 
-	        // user/index.php expect course context, so get one if page has module context.
-        //$currentcontext = $this->page->context->get_course_context(false);
-
-        $this->content->text = '<h2>' . number_format($this->get_grade(), 0) . ' points</h2>';
-
-        //if (empty($currentcontext)) {
-        //    return $this->content;
-        //}
-        //if ($this->page->course->id == SITEID) {
-        //    $this->content->text .= "site context";
-        //}
+        $this->content->text = '<h2>' . $this->get_formatted_grade() . '</h2>';
 
         return $this->content;
     }

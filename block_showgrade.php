@@ -77,13 +77,8 @@ class block_showgrade extends block_base {
         if ($this->get_grade() == null) {
             return "-";
         }
-        if (is_numeric($this->get_grade())) {
-            return number_format($this->get_grade(), 0) . ' points';
-        }
-        else {
-            // This should never happen!
-            return "*";
-        }
+
+        return number_format($this->get_grade()->finalgrade, 0) . ' points';
     }
 
     function get_content() {

@@ -33,5 +33,5 @@ $string['showgrade:addinstance'] = 'Add a grade block';
 $string['showgrade:myaddinstance'] = 'Add a grade block to my moodle';
 $string['pluginname'] = 'Show Grade';
 $string['defaulttitle'] = 'Grade';
-$string['defaulttext'] = 'Grade';
 $string['blocktitle'] = 'Block title';
+$string['coursetotal'] = 'Course total';

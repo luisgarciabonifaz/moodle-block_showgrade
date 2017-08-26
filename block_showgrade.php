@@ -30,24 +30,30 @@ require_once($CFG->libdir . '/gradelib.php');
 class block_showgrade extends block_base {
 
     function init() {
-        $this->title = get_string('pluginname', 'block_showgrade');
+        $this->title = null;
         $this->grade = null;
         $this->category = null;
     }
 
     public function specialization() {
         if (isset($this->config)) {
-            if (empty($this->config->title)) {
-                $this->title = get_string('defaulttitle', 'block_showgrade');
-            } else {
-                $this->title = $this->config->title;
-            }
-
-            if (empty($this->config->text)) {
-                $this->config->text = get_string('defaulttext', 'block_showgrade');
+            // TODO apply null pattern
+            if (isset($this->config->category)) {
+                if (empty($this->config->title)) {
+                    $this->title = $this->get_category()->fullname;
+                    if ($this->title == "?") {
+                        $this->title = get_string('coursetotal', 'block_showgrade');
+                    }
+                } else {
+                    $this->title = $this->config->title;
+                }
             }
         }
+        else {
+            $this->title = get_string('defaulttitle', 'block_showgrade');
+        }
     }
+
 
     function get_category() {
         if ($this->category == null && $this->config->category !== null) {
@@ -59,7 +65,6 @@ class block_showgrade extends block_base {
     function get_grade() {
         global $DB, $USER;
         if ($this->grade == null && $this->config->category !== null) {
-            ;
             $this->grade = $DB->get_record('grade_grades',
                     array('itemid'=> $this->get_category()->get_grade_item()->id,
                           'userid'=> $USER->id));
@@ -86,24 +91,16 @@ class block_showgrade extends block_base {
         $this->content->footer = '';
 
 	        // user/index.php expect course context, so get one if page has module context.
-        $currentcontext = $this->page->context->get_course_context(false);
-
-        if (! empty($this->config->text)) {
-            $this->content->text = $this->config->text;
-        }
+        //$currentcontext = $this->page->context->get_course_context(false);
 
         $this->content->text = '<h2>' . number_format($this->get_grade(), 0) . ' points</h2>';
 
-        if (empty($currentcontext)) {
-            return $this->content;
-        }
-        if ($this->page->course->id == SITEID) {
-            $this->content->text .= "site context";
-        }
-
-        if (! empty($this->config->text)) {
-            $this->content->text .= $this->config->text;
-        }
+        //if (empty($currentcontext)) {
+        //    return $this->content;
+        //}
+        //if ($this->page->course->id == SITEID) {
+        //    $this->content->text .= "site context";
+        //}
 
         return $this->content;
     }
@@ -111,8 +108,8 @@ class block_showgrade extends block_base {
     // my moodle can only have SITEID and it's redundant here, so take it away
     public function applicable_formats() {
         return array('all' => false,
-                     'site' => true,
-                     'site-index' => true,
+                     'site' => false,
+                     'site-index' => false,
                      'course-view' => true,
                      'course-view-social' => false,
                      'mod' => true,
@@ -120,16 +117,14 @@ class block_showgrade extends block_base {
     }
 
     public function instance_allow_multiple() {
-          return true;
+        return true;
     }
 
     function has_config() {return true;}
 
     public function cron() {
-            mtrace( "Hey, my cron script is running" );
-
-                 // do something
-
-                      return true;
+        mtrace( "Hey, my cron script is running" );
+        // do something
+        return true;
     }
 }

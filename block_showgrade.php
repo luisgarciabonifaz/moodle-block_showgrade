@@ -31,6 +31,8 @@ class block_showgrade extends block_base {
 
     function init() {
         $this->title = get_string('pluginname', 'block_showgrade');
+        $this->grade = null;
+        $this->category = null;
     }
 
     public function specialization() {
@@ -47,8 +49,27 @@ class block_showgrade extends block_base {
         }
     }
 
+    function get_category() {
+        if ($this->category == null && $this->config->category !== null) {
+            $this->category = grade_category::fetch(array('id'=> $this->config->category));
+        }
+        return $this->category;
+    }
+
+    function get_grade() {
+        global $DB, $USER;
+        if ($this->grade == null && $this->config->category !== null) {
+            ;
+            $this->grade = $DB->get_record('grade_grades',
+                    array('itemid'=> $this->get_category()->get_grade_item()->id,
+                          'userid'=> $USER->id));
+        }
+
+        return $this->grade->finalgrade;
+    }
+
     function get_content() {
-        global $DB, $CFG, $USER, $OUTPUT;
+        global $CFG, $OUTPUT;
 
         if ($this->content !== null) {
             return $this->content;
@@ -71,13 +92,7 @@ class block_showgrade extends block_base {
             $this->content->text = $this->config->text;
         }
 
-        // Set content
-        if ($this->config->category !== null) {
-            $grade_category = grade_category::fetch(array('id'=> $this->config->category));
-            $gradeitem = $grade_category->get_grade_item();
-            $user_grade = $DB->get_record('grade_grades', array('itemid'=> $gradeitem->id, 'userid'=> $USER->id));
-            $this->content->text = '<h2>' . number_format($user_grade->finalgrade, 0) . ' points</h2>';
-        }
+        $this->content->text = '<h2>' . number_format($this->get_grade(), 0) . ' points</h2>';
 
         if (empty($currentcontext)) {
             return $this->content;

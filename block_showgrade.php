@@ -101,6 +101,25 @@ class block_showgrade extends block_base {
         return $this->get_points_nextlevel() . ' ' . get_string('pointslevelup', 'block_showgrade');
     }
 
+
+    function percent($number){
+        return number_format($number, 2) * 100 . '%';
+    }
+
+    function get_completed_percent() {
+        return $this->percent($this->get_finalgrade() / $this->get_maxpoints()) . ' ' . get_string('completed', 'block_showgrade');
+    }
+
+    function get_maxpoints() {
+        return $this->get_grade()->rawgrademax;
+    }
+
+    function get_formatted_maxpoints() {
+        return get_string('of','block_showgrade')
+                . ' ' . number_format($this->get_maxpoints(),0)
+                . ' ' . get_string('possiblepoints', 'block_showgrade');
+    }
+
     function get_content() {
         global $CFG, $OUTPUT;
 
@@ -115,13 +134,30 @@ class block_showgrade extends block_base {
 
         $this->content = new stdClass();
         $this->content->footer = '';
+        $this->content->text = '';
 
-        $this->content->text = '<h4>' . $this->get_formatted_grade() . '</h4>';
+        if ($this->config == null) {
+            return $this->content;
+        }
 
         if (property_exists($this->config, 'enablelevels')) {
             if ($this->config->enablelevels == true) {
-                $this->content->text = '<h2>' . $this->get_formatted_level() . '</h2>' . $this->content->text;
+                $this->content->text .= '<h2>' . $this->get_formatted_level() . '</h2>';
                 $this->content->text .= '<p>' . $this->get_formatted_nextlevel() .'</p>';
+            }
+        }
+
+        $this->content->text .= '<h4>' . $this->get_formatted_grade() . '</h4>';
+
+        if (property_exists($this->config, 'enablemaxpoints')) {
+            if ($this->config->enablemaxpoints == true) {
+                $this->content->text.= '<p>' . $this->get_formatted_maxpoints() . '</p>';
+            }
+        }
+
+        if (property_exists($this->config, 'enablecompletion')) {
+            if ($this->config->enablecompletion == true) {
+                $this->content->text.= '<p>' . $this->get_completed_percent() . '</p>';
             }
         }
 

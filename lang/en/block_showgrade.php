@@ -35,3 +35,7 @@ $string['pluginname'] = 'Show Grade';
 $string['defaulttitle'] = 'Grade';
 $string['blocktitle'] = 'Block title';
 $string['coursetotal'] = 'Course total';
+$string['enablelevels'] = 'Enable levels';
+$string['numberlevels'] = 'Number of levels';
+$string['pointslevelup'] = 'points to level up';
+$string['level'] = 'Level';

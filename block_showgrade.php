@@ -73,12 +73,32 @@ class block_showgrade extends block_base {
         return $this->grade;
     }
 
+    function get_finalgrade() {
+        return $this->get_grade()->finalgrade;
+    }
+
+    function get_level() {
+        return number_format($this->get_finalgrade() / $this->config->pointslevel, 0);
+    }
+
+    function get_formatted_level() {
+        return get_string('level', 'block_showgrade') . ' ' . $this->get_level();
+    }
+
     function get_formatted_grade() {
         if ($this->get_grade() == null) {
             return "-";
         }
 
-        return number_format($this->get_grade()->finalgrade, 0) . ' points';
+        return number_format($this->get_finalgrade(), 0) . ' points';
+    }
+
+    function get_points_nextlevel() {
+        return number_format($this->config->pointslevel * ($this->get_level() + 1) - $this->get_finalgrade(), 0);
+    }
+
+    function get_formatted_nextlevel() {
+        return $this->get_points_nextlevel() . ' ' . get_string('pointslevelup', 'block_showgrade');
     }
 
     function get_content() {
@@ -96,12 +116,18 @@ class block_showgrade extends block_base {
         $this->content = new stdClass();
         $this->content->footer = '';
 
-        $this->content->text = '<h2>' . $this->get_formatted_grade() . '</h2>';
+        $this->content->text = '<h4>' . $this->get_formatted_grade() . '</h4>';
+
+        if (property_exists($this->config, 'enablelevels')) {
+            if ($this->config->enablelevels == true) {
+                $this->content->text = '<h2>' . $this->get_formatted_level() . '</h2>' . $this->content->text;
+                $this->content->text .= '<p>' . $this->get_formatted_nextlevel() .'</p>';
+            }
+        }
 
         return $this->content;
     }
 
-    // my moodle can only have SITEID and it's redundant here, so take it away
     public function applicable_formats() {
         return array('all' => false,
                      'site' => false,

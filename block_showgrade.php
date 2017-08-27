@@ -30,7 +30,7 @@ require_once($CFG->libdir . '/gradelib.php');
 class block_showgrade extends block_base {
 
     function init() {
-        $this->title = null;
+        $this->title = '';
         $this->grade = null;
         $this->category = null;
     }

@@ -68,7 +68,7 @@ class block_showgrade extends block_base {
             $category = $this->get_category();
             if ($category) { 
                 $this->grade = $DB->get_record('grade_grades',
-                        array('itemid'=> $this->get_category()->get_grade_item()->id,
+                        array('itemid'=> $category->get_grade_item()->id,
                               'userid'=> $USER->id));
             } else {
                 $this->grade = null;
@@ -79,7 +79,12 @@ class block_showgrade extends block_base {
     }
 
     function get_finalgrade() {
-        return $this->get_grade()->finalgrade;
+        if ($this->get_grade() != null) {
+            return $this->get_grade()->finalgrade;
+        }
+        else {
+            return 0;
+        }
     }
 
     function get_level() {

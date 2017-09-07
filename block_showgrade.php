@@ -65,9 +65,14 @@ class block_showgrade extends block_base {
     function get_grade() {
         global $DB, $USER;
         if ($this->grade == null && $this->config->category !== null) {
-            $this->grade = $DB->get_record('grade_grades',
-                    array('itemid'=> $this->get_category()->get_grade_item()->id,
-                          'userid'=> $USER->id));
+            $category = $this->get_category();
+            if ($category) { 
+                $this->grade = $DB->get_record('grade_grades',
+                        array('itemid'=> $this->get_category()->get_grade_item()->id,
+                              'userid'=> $USER->id));
+            } else {
+                $this->grade = null;
+            }
         }
 
         return $this->grade;

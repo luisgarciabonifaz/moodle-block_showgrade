@@ -152,6 +152,7 @@ class block_showgrade extends block_base {
 
         if (property_exists($this->config, 'enablelevels')) {
             if ($this->config->enablelevels == true) {
+		$this->content->text .= '<img src="/blocks/showgrade/img/' . $this->get_level() . '.png" height="100" width="100" />';
                 $this->content->text .= '<h2>' . $this->get_formatted_level() . '</h2>';
                 $this->content->text .= '<p>' . $this->get_formatted_nextlevel() .'</p>';
             }

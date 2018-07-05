@@ -1,2 +1,5 @@
+Add icons for levels with square images of no more than 100 pixels.
+Naming should follow 'level.png', as 0.png, 1.png, etc...
+Images uploaded by Luis Garcia from http://www.iconsplace.com/ on 05/07/2018
 
 Files with images from fucntion image_url

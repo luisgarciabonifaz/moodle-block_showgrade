@@ -152,12 +152,14 @@ class block_showgrade extends block_base {
 
         if (property_exists($this->config, 'enablelevels')) {
             if ($this->config->enablelevels == true) {
-		$this->content->text .= '<img src="/blocks/showgrade/img/' . $this->get_level() . '.png" height="100" width="100" />';
+		// Reducción del tamñao de la imagen a 75 x 75 (estaba en 100 x 100)
+		$this->content->text .= '<img src="/blocks/showgrade/img/' . $this->get_level() . '.png" height="75" width="75" />';
                 //Posible modificiación:  Luis Garcia Bonifaz
 		//
 		//<img src="' . $this->image_url('moodlelogo') . '" alt="'.get_string('moodlelogo').'" /></a></div>';
 		//
-		$this->content->text .= '<h2>' . $this->get_formatted_level() . '</h2>';
+		// Elimino el texto del nivel ya que esta la imagen
+		//$this->content->text .= '<h2>' . $this->get_formatted_level() . '</h2>';
                 $this->content->text .= '<p>' . $this->get_formatted_nextlevel() .'</p>';
             }
         }

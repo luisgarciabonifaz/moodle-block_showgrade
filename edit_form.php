@@ -30,6 +30,7 @@ class block_showgrade_edit_form extends block_edit_form {
         $mform->addElement('advcheckbox', 'config_enablelevels', get_string('enablelevels', 'block_showgrade'));
 
         $points = [100=>100,150=>150,200=>200,250=>250,300=>300,400=>400,500=>500,1000=>1000];
+        // Cambio sobre el original se han eliminado las puntuaciones de 2000 y 500 y se han añadido 150 y 250
 
         $mform->addElement('select', 'config_pointslevel', get_string('pointslevelup', 'block_showgrade'), $points);
         $mform->disabledIf('config_levels', 'config_enablelevels');

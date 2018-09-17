@@ -156,10 +156,10 @@ class block_showgrade extends block_base {
 		$this->content->text .= '<img src="/blocks/showgrade/img/' . $this->get_level() . '.png" height="75" width="75" />';
                 //Posible modificiación:  Luis Garcia Bonifaz
 		//
-		//<img src="' . $this->image_url('moodlelogo') . '" alt="'.get_string('moodlelogo').'" /></a></div>';
+		<img src="' . $this->image_url('0.png') . '" alt="'.get_string('moodlelogo').'" /></a></div>';
 		//
 		// Elimino el texto del nivel ya que esta la imagen
-		//$this->content->text .= '<h2>' . $this->get_formatted_level() . '</h2>';
+		$this->content->text .= '<h2>' . $this->get_formatted_level() . '</h2>';
                 $this->content->text .= '<p>' . $this->get_formatted_nextlevel() .'</p>';
             }
         }
